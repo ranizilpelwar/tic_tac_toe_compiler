@@ -17,4 +17,12 @@ defmodule JSONParserTest do
   test "start game command for Parser returns POST in a KV pair" do
     assert JSONParser.parse("start game") === ['POST', 'start game']
   end
+
+  test "start game command with match number for Parser returns POST and argument" do
+    assert JSONParser.parse("start game 2") === ['POST', 'start game', 2]
+  end
+
+  test "start game command with match number and a player symbol for Parser returns POST and arguments" do
+    assert JSONParser.parse(~s("X")) === "X"
+  end
 end

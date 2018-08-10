@@ -22,6 +22,10 @@ value ->
     game_status : ["PUT", extract_value('$1')].
 value ->
     start_game : ["POST", extract_value('$1')].
+value ->
+    start_game int : ["POST", extract_value('$1'), extract_value('$2')].
+value ->
+    start_game int string : ["POST", extract_value('$1'), extract_value('$2'), extract_value('$3')].
 array ->
     '[' array_elements ']' : '$2'.
 array ->
