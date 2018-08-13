@@ -11,7 +11,7 @@ Rules.
 
 {COMMAND}            : {token, {list_to_atom("command"), TokenLine, TokenChars}}.
 {PLAYER_SYMBOL}      : {token, {list_to_atom("player_symbol"), TokenLine, TokenChars}}.
-{MATCH_NUMBER}       : {token, {list_to_atom("match_number"), TokenLine, list_to_integer(TokenChars)}}.
+{MATCH_NUMBER}       : {token, {list_to_atom("match_number"), TokenLine, TokenChars}}.
 {WHITESPACE}         : skip_token.
 
 Erlang code.

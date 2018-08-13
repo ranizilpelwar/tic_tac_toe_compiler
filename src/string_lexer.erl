@@ -520,7 +520,7 @@ yyaction_1(TokenChars, TokenLine) ->
 -compile({inline,yyaction_2/2}).
 -file("src/string_lexer.xrl", 12).
 yyaction_2(TokenChars, TokenLine) ->
-     { token, { list_to_atom ("match_number"), TokenLine, list_to_integer (TokenChars) } } .
+     { token, { list_to_atom ("match_number"), TokenLine, TokenChars } } .
 
 -compile({inline,yyaction_3/0}).
 -file("src/string_lexer.xrl", 13).
