@@ -36,4 +36,8 @@ defmodule StringParserTest do
   test "player symbol command for two symbols for Parser returns symbols provided" do
     assert StringParser.parse("X O") === 'X O'
   end
+
+  test "start game command for two symbols for Parser returns method name start_game" do
+    assert StringParser.parse("start game") === 'start_game'
+  end
 end

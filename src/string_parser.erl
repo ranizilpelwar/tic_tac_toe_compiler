@@ -5,7 +5,7 @@
 extract_value({_, _, Value}) ->
     Value.
 
-combine_values(Value, Value2) ->
+combine_values({_, _, Value}, {_, _, Value2}) ->
     string:join([Value, Value2], " ").
 -file("/usr/local/Cellar/erlang/21.0.4/lib/erlang/lib/parsetools-2.1.7/include/yeccpre.hrl", 0).
 %%
@@ -209,15 +209,15 @@ yeccpars2_2(S, player_symbol, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 3, Ss, Stack, T, Ts, Tzr);
 yeccpars2_2(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_2_(Stack),
- yeccgoto_command(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
+ yeccgoto_request(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_3(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  [_|Nss] = Ss,
  NewStack = yeccpars2_3_(Stack),
- yeccgoto_command(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
+ yeccgoto_request(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
 
--dialyzer({nowarn_function, yeccgoto_command/7}).
-yeccgoto_command(0, Cat, Ss, Stack, T, Ts, Tzr) ->
+-dialyzer({nowarn_function, yeccgoto_request/7}).
+yeccgoto_request(0, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_1(1, Cat, Ss, Stack, T, Ts, Tzr).
 
 -compile({inline,yeccpars2_2_/1}).
@@ -233,7 +233,7 @@ yeccpars2_2_(__Stack0) ->
 yeccpars2_3_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
-   combine_values ( extract_value ( __1 ) , extract_value ( __2 ) )
+   combine_values ( __1 , __2 )
   end | __Stack].
 
 
