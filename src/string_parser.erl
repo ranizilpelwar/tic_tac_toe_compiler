@@ -1,10 +1,12 @@
 -module(string_parser).
 -export([parse/1, parse_and_scan/1, format_error/1]).
--file("src/string_parser.yrl", 7).
+-file("src/string_parser.yrl", 8).
 
 extract_value({_, _, Value}) ->
     Value.
 
+combine_values(Value, Value2) ->
+    string:join([Value, Value2], " ").
 -file("/usr/local/Cellar/erlang/21.0.4/lib/erlang/lib/parsetools-2.1.7/include/yeccpre.hrl", 0).
 %%
 %% %CopyrightBegin%
@@ -177,7 +179,7 @@ yecctoken2string(Other) ->
 
 
 
--file("src/string_parser.erl", 180).
+-file("src/string_parser.erl", 182).
 
 -dialyzer({nowarn_function, yeccpars2/7}).
 yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
@@ -186,6 +188,8 @@ yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
 %%  yeccpars2_1(S, Cat, Ss, Stack, T, Ts, Tzr);
 yeccpars2(2=S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_2(S, Cat, Ss, Stack, T, Ts, Tzr);
+yeccpars2(3=S, Cat, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars2_3(S, Cat, Ss, Stack, T, Ts, Tzr);
 yeccpars2(Other, _, _, _, _, _, _) ->
  erlang:error({yecc_bug,"1.4",{missing_state_in_action_table, Other}}).
 
@@ -201,9 +205,16 @@ yeccpars2_1(_S, '$end', _Ss, Stack, _T, _Ts, _Tzr) ->
 yeccpars2_1(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
+yeccpars2_2(S, player_symbol, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars1(S, 3, Ss, Stack, T, Ts, Tzr);
 yeccpars2_2(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_2_(Stack),
  yeccgoto_command(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
+
+yeccpars2_3(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+ [_|Nss] = Ss,
+ NewStack = yeccpars2_3_(Stack),
+ yeccgoto_command(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
 
 -dialyzer({nowarn_function, yeccgoto_command/7}).
 yeccgoto_command(0, Cat, Ss, Stack, T, Ts, Tzr) ->
@@ -217,5 +228,13 @@ yeccpars2_2_(__Stack0) ->
    extract_value ( __1 )
   end | __Stack].
 
+-compile({inline,yeccpars2_3_/1}).
+-file("src/string_parser.yrl", 2).
+yeccpars2_3_(__Stack0) ->
+ [__2,__1 | __Stack] = __Stack0,
+ [begin
+   combine_values ( extract_value ( __1 ) , extract_value ( __2 ) )
+  end | __Stack].
 
--file("src/string_parser.yrl", 11).
+
+-file("src/string_parser.yrl", 14).
