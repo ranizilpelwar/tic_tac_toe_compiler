@@ -7,15 +7,12 @@ request -> player_symbol : extract_value('$1').
 request -> player_symbol player_symbol : concat(extract_value('$1'), extract_value('$2')).
 request -> command : [list_to_atom(method_name(extract_value('$1'))), empty_array()].
 request -> command match_number player_symbol player_symbol : [list_to_atom(method_name(extract_value('$1'))), 
-[extract_string_value('$2'), extract_string_value('$3'), extract_string_value('$4')]].
+            map(extract_value('$2'), extract_value('$3'), extract_value('$4'))].
 
 Erlang code.
 
 extract_value({_, _, Value}) ->
     Value.
-
-extract_string_value({_, _, Value}) ->
-    list_to_binary(Value).  
 
 concat(Value, Value2) ->
     string:join([Value, Value2], " ").
@@ -40,3 +37,6 @@ method_name_as_atom(Value) ->
 
 empty_array() ->
     [].
+
+map(Value1, Value2, Value3) ->
+    #{list_to_atom("match_number") => Value1, list_to_atom("player1_symbol") => Value2, list_to_atom("player2_symbol") => Value3}.

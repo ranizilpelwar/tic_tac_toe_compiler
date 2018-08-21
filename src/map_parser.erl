@@ -1,12 +1,9 @@
--module(method_parser).
+-module(map_parser).
 -export([parse/1, parse_and_scan/1, format_error/1]).
--file("src/method_parser.yrl", 12).
+-file("src/map_parser.yrl", 12).
 
 extract_value({_, _, Value}) ->
     Value.
-
-extract_string_value({_, _, Value}) ->
-    list_to_binary(Value).  
 
 concat(Value, Value2) ->
     string:join([Value, Value2], " ").
@@ -31,6 +28,10 @@ method_name_as_atom(Value) ->
 
 empty_array() ->
     [].
+
+map(Value1, Value2, Value3) ->
+    #{list_to_atom("match_number") => Value1, list_to_atom("player1_symbol") => Value2, list_to_atom("player2_symbol") => Value3}.
+
 -file("/usr/local/Cellar/erlang/21.0.4/lib/erlang/lib/parsetools-2.1.7/include/yeccpre.hrl", 0).
 %%
 %% %CopyrightBegin%
@@ -203,7 +204,7 @@ yecctoken2string(Other) ->
 
 
 
--file("src/method_parser.erl", 206).
+-file("src/map_parser.erl", 207).
 
 -dialyzer({nowarn_function, yeccpars2/7}).
 yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
@@ -286,7 +287,7 @@ yeccgoto_request(0, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_1(1, Cat, Ss, Stack, T, Ts, Tzr).
 
 -compile({inline,yeccpars2_2_/1}).
--file("src/method_parser.yrl", 4).
+-file("src/map_parser.yrl", 4).
 yeccpars2_2_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -294,7 +295,7 @@ yeccpars2_2_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_3_/1}).
--file("src/method_parser.yrl", 1).
+-file("src/map_parser.yrl", 1).
 yeccpars2_3_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -302,7 +303,7 @@ yeccpars2_3_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_4_/1}).
--file("src/method_parser.yrl", 2).
+-file("src/map_parser.yrl", 2).
 yeccpars2_4_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -310,7 +311,7 @@ yeccpars2_4_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_5_/1}).
--file("src/method_parser.yrl", 3).
+-file("src/map_parser.yrl", 3).
 yeccpars2_5_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -318,13 +319,13 @@ yeccpars2_5_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_8_/1}).
--file("src/method_parser.yrl", 5).
+-file("src/map_parser.yrl", 5).
 yeccpars2_8_(__Stack0) ->
  [__4,__3,__2,__1 | __Stack] = __Stack0,
  [begin
    [ list_to_atom ( method_name ( extract_value ( __1 ) ) ) ,
-    [ extract_string_value ( __2 ) , extract_string_value ( __3 ) , extract_string_value ( __4 ) ] ]
+    map ( extract_value ( __2 ) , extract_value ( __3 ) , extract_value ( __4 ) ) ]
   end | __Stack].
 
 
--file("src/method_parser.yrl", 42).
+-file("src/map_parser.yrl", 43).
