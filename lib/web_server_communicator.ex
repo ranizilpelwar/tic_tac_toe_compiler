@@ -24,4 +24,5 @@ defmodule WebServerCommunicator do
             HTTPoison.post @url <> route, json, [{"Content-Type", "application/json"}] 
         end
     end
+
 end
