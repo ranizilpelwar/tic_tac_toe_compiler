@@ -17,11 +17,11 @@ defmodule Game do
             method = MethodParser.parse(command)
             request = MethodParser.call(method)
             game_state = WebServerCommunicator.send_request(request)
-            IO.puts "Board:"
+            IO.puts "Tic Tac Toe Board:"
             board = game_state["game"]["board"]
-            IO.puts display_board(board)
-            #execute_command(game_state)
-            game_state
+            IO.puts format_board(board)
+            execute_command(game_state)
+            #game_state
         end
     end
 
@@ -29,16 +29,12 @@ defmodule Game do
         IO.puts "Game Over"
     end
 
-    def display_board(list) when length(list) == 0 do
+    def format_board(list) when length(list) == 0 do
         "|"
     end
 
-   # def display_board(list) when length(list) == 3 do
-   #     "\n===+===+===\n"
-   # end
-
-    def display_board([head | tail]) do
-        "|" <> head <> conditionally_display_horizontal_bars(tail) <> display_board(tail)
+    def format_board([head | tail]) do
+        "|" <> head <> conditionally_display_horizontal_bars(tail) <> format_board(tail)
     end
 
     def conditionally_display_horizontal_bars(list) do
