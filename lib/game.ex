@@ -17,10 +17,10 @@ defmodule Game do
             show_end_game_results()
         else
             command = IO.gets "Enter a command:"
-            command = String.trim(command)
-            method = MethodParser.parse(command)
-            request = MethodParser.call(method)
-            game_state = WebServerCommunicator.send_request(request)
+            command = String.trim(command)          # "start game 2 X O"
+            method_with_arguments = MethodParser.parse(command)    # :start_game, ["2", "X", "O"]
+            request = MethodParser.call(method_with_arguments)     # %{statuses: %{game_over: false}}  
+            game_state = WebServerCommunicator.send_request(request) # new game state as a map
             BoardGenerator.display_board(game_state["game"]["board"])
             execute_command(game_state)
             #game_state
