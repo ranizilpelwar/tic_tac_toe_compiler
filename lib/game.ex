@@ -19,11 +19,7 @@ defmodule Game do
         if (Map.has_key?(map, "game") && map["game"]["current_player_symbol"] === map["game"]["player2_symbol"]) do
             play_as_computer(map)
         else
-            command = IO.gets "Enter a command:"
-            command = String.trim(command)          # "start game 2 X O"
-            method_with_arguments = MethodParser.parse(command)    # :start_game, ["2", "X", "O"]
-            action = MethodParser.call(method_with_arguments)     # %{statuses: %{game_over: false}}  
-            display_updated_game_details(map, action)
+            get_human_input(map)
             #game_state
         end
     end
@@ -39,6 +35,14 @@ defmodule Game do
     def play_as_computer(request) do
         IO.puts "Playing computer's turn:" # add player symbol
         action = %{verb: "PUT", route: "computer_players_turn"}
+        display_updated_game_details(request, action)
+    end
+
+    def get_human_input(request) do
+        command = IO.gets "Enter a command:"
+        command = String.trim(command)
+        method_with_arguments = MethodParser.parse(command)
+        action = MethodParser.call(method_with_arguments)  
         display_updated_game_details(request, action)
     end
 
