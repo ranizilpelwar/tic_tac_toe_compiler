@@ -15,6 +15,9 @@ defmodule Game do
         end
         if (Map.has_key?(map, :statuses) && map.statuses.game_over === true) do
             show_end_game_results()
+        end
+        if (Map.has_key?(map, "game") && map["game"]["current_player_symbol"] === map["game"]["player2_symbol"]) do
+            play_as_computer(map)
         else
             command = IO.gets "Enter a command:"
             command = String.trim(command)          # "start game 2 X O"
@@ -34,5 +37,13 @@ defmodule Game do
 
     def combine_maps(old, new) do
         Map.merge(old, new, fn _k, v1, v2 -> v2 end)
+    end
+
+    def play_as_computer(request) do
+        IO.puts "Playing computer's turn:" # add player symbol
+        request = combine_maps(request, %{verb: "PUT", route: "computer_players_turn"})
+        game_state = WebServerCommunicator.send_request(request) # new game state as a map
+        BoardGenerator.display_board(game_state["game"]["board"])
+        execute_command(game_state)
     end
 end
