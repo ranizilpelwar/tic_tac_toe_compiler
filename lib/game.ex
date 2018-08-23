@@ -9,7 +9,7 @@ defmodule Game do
     end
 
     def execute_command(map) do
-        if (Map.has_key?(map, :timeout)) do
+        if (map === :timeout) do
             IO.puts "Waking up web server"
             execute_command(map)
         end
@@ -19,7 +19,8 @@ defmodule Game do
             command = IO.gets "Enter a command:"
             command = String.trim(command)          # "start game 2 X O"
             method_with_arguments = MethodParser.parse(command)    # :start_game, ["2", "X", "O"]
-            request = MethodParser.call(method_with_arguments)     # %{statuses: %{game_over: false}}  
+            action = MethodParser.call(method_with_arguments)     # %{statuses: %{game_over: false}}  
+            request = combine_maps(map, action)
             game_state = WebServerCommunicator.send_request(request) # new game state as a map
             BoardGenerator.display_board(game_state["game"]["board"])
             execute_command(game_state)
@@ -31,4 +32,7 @@ defmodule Game do
         IO.puts "Game Over"
     end
 
+    def combine_maps(old, new) do
+        Map.merge(old, new, fn _k, v1, v2 -> v2 end)
+    end
 end

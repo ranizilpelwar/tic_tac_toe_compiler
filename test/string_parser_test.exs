@@ -60,12 +60,4 @@ defmodule StringParserTest do
   test "game status command for Parser returns method name game_status" do
     assert StringParser.parse("game status") === 'game_status'
   end
-
-  test "human player move command to Lexer returns list of tokens" do
-    assert StringParser.tokens("play X at tile 5") ===  {:ok, [{:command, 1, 'play'}, 
-                                                                {:player_symbol, 1, 'X'},
-                                                                {:tile_on_board, 1, '5'}
-                                                               ],
-                                                          1}
-  end
 end

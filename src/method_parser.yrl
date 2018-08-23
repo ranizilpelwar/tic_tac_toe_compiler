@@ -1,4 +1,4 @@
-Terminals player_symbol command match_number.
+Terminals player_symbol command match_number tile_on_board. %% NOTE: name has to match atom from Lexer
 Nonterminals request.
 Rootsymbol request.
 
@@ -8,6 +8,8 @@ request -> player_symbol player_symbol : concat(extract_value('$1'), extract_val
 request -> command : [list_to_atom(method_name(extract_value('$1'))), empty_array()].
 request -> command match_number player_symbol player_symbol : [list_to_atom(method_name(extract_value('$1'))), 
 [extract_string_value('$2'), extract_string_value('$3'), extract_string_value('$4')]].
+request -> command player_symbol tile_on_board : [list_to_atom(method_name(extract_value('$1'))), 
+[extract_string_value('$2'), extract_string_value('$3')]].
 
 Erlang code.
 
@@ -31,9 +33,6 @@ wrap(Value, Value2, Value3) ->
 
 method_name(Value) ->
     string:join(string:tokens(Value, " "), "_").
-
-start_game_signature({_, _, Command}, {_, _, Match_Number}, {_, _, Player1_Symbol}, {_, _, Player2_Symbol}) ->
-    merge(method_name(Command), wrap(Match_Number, Player1_Symbol, Player2_Symbol)).
 
 method_name_as_atom(Value) ->
     list_to_atom(method_name(Value)).

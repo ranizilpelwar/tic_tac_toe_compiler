@@ -1,6 +1,6 @@
 -module(method_parser).
 -export([parse/1, parse_and_scan/1, format_error/1]).
--file("src/method_parser.yrl", 12).
+-file("src/method_parser.yrl", 14).
 
 extract_value({_, _, Value}) ->
     Value.
@@ -22,9 +22,6 @@ wrap(Value, Value2, Value3) ->
 
 method_name(Value) ->
     string:join(string:tokens(Value, " "), "_").
-
-start_game_signature({_, _, Command}, {_, _, Match_Number}, {_, _, Player1_Symbol}, {_, _, Player2_Symbol}) ->
-    merge(method_name(Command), wrap(Match_Number, Player1_Symbol, Player2_Symbol)).
 
 method_name_as_atom(Value) ->
     list_to_atom(method_name(Value)).
@@ -203,7 +200,7 @@ yecctoken2string(Other) ->
 
 
 
--file("src/method_parser.erl", 206).
+-file("src/method_parser.erl", 203).
 
 -dialyzer({nowarn_function, yeccpars2/7}).
 yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
@@ -224,6 +221,10 @@ yeccpars2(7=S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_7(S, Cat, Ss, Stack, T, Ts, Tzr);
 yeccpars2(8=S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_8(S, Cat, Ss, Stack, T, Ts, Tzr);
+yeccpars2(9=S, Cat, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars2_9(S, Cat, Ss, Stack, T, Ts, Tzr);
+yeccpars2(10=S, Cat, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars2_10(S, Cat, Ss, Stack, T, Ts, Tzr);
 yeccpars2(Other, _, _, _, _, _, _) ->
  erlang:error({yecc_bug,"1.4",{missing_state_in_action_table, Other}}).
 
@@ -245,6 +246,8 @@ yeccpars2_1(_, _, _, _, T, _, _) ->
 
 yeccpars2_2(S, match_number, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 6, Ss, Stack, T, Ts, Tzr);
+yeccpars2_2(S, player_symbol, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars1(S, 7, Ss, Stack, T, Ts, Tzr);
 yeccpars2_2(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_2_(Stack),
  yeccgoto_request(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
@@ -266,19 +269,30 @@ yeccpars2_5(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
 
 -dialyzer({nowarn_function, yeccpars2_6/7}).
 yeccpars2_6(S, player_symbol, Ss, Stack, T, Ts, Tzr) ->
- yeccpars1(S, 7, Ss, Stack, T, Ts, Tzr);
+ yeccpars1(S, 9, Ss, Stack, T, Ts, Tzr);
 yeccpars2_6(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
 -dialyzer({nowarn_function, yeccpars2_7/7}).
-yeccpars2_7(S, player_symbol, Ss, Stack, T, Ts, Tzr) ->
+yeccpars2_7(S, tile_on_board, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 8, Ss, Stack, T, Ts, Tzr);
 yeccpars2_7(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
 yeccpars2_8(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- [_,_,_|Nss] = Ss,
+ [_,_|Nss] = Ss,
  NewStack = yeccpars2_8_(Stack),
+ yeccgoto_request(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
+
+-dialyzer({nowarn_function, yeccpars2_9/7}).
+yeccpars2_9(S, player_symbol, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars1(S, 10, Ss, Stack, T, Ts, Tzr);
+yeccpars2_9(_, _, _, _, T, _, _) ->
+ yeccerror(T).
+
+yeccpars2_10(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+ [_,_,_|Nss] = Ss,
+ NewStack = yeccpars2_10_(Stack),
  yeccgoto_request(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
 
 -dialyzer({nowarn_function, yeccgoto_request/7}).
@@ -318,8 +332,17 @@ yeccpars2_5_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_8_/1}).
--file("src/method_parser.yrl", 5).
+-file("src/method_parser.yrl", 7).
 yeccpars2_8_(__Stack0) ->
+ [__3,__2,__1 | __Stack] = __Stack0,
+ [begin
+   [ list_to_atom ( method_name ( extract_value ( __1 ) ) ) ,
+    [ extract_string_value ( __2 ) , extract_string_value ( __3 ) ] ]
+  end | __Stack].
+
+-compile({inline,yeccpars2_10_/1}).
+-file("src/method_parser.yrl", 5).
+yeccpars2_10_(__Stack0) ->
  [__4,__3,__2,__1 | __Stack] = __Stack0,
  [begin
    [ list_to_atom ( method_name ( extract_value ( __1 ) ) ) ,
@@ -327,4 +350,4 @@ yeccpars2_8_(__Stack0) ->
   end | __Stack].
 
 
--file("src/method_parser.yrl", 42).
+-file("src/method_parser.yrl", 41).

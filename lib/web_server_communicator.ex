@@ -20,9 +20,10 @@ defmodule WebServerCommunicator do
     end
 
     def get_response(json, verb, route) do
-        if verb === "POST" do
-            HTTPoison.post @url <> route, json, [{"Content-Type", "application/json"}] 
+        case verb do
+        "POST" -> HTTPoison.post @url <> route, json, [{"Content-Type", "application/json"}] 
+        "PUT" -> HTTPoison.put @url <> route, json, [{"Content-Type", "application/json"}] 
+        _ -> "missing case"
         end
     end
-
 end
