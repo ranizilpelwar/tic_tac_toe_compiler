@@ -13,14 +13,23 @@ defmodule Game do
             IO.puts "Waking up web server"
             execute_command(map)
         end
-        if (Map.has_key?(map, :statuses) && map.statuses.game_over === true) do
-            show_end_game_results()
-        end
-        if (Map.has_key?(map, "game") && is_computers_turn(map)) do
-            play_as_computer(map)
+        if (is_game_over(map) === true) do
+            show_end_game_results(map)
         else
-            get_human_input(map)
-            #game_state
+            if (Map.has_key?(map, "game") && is_computers_turn(map)) do
+                play_as_computer(map)
+            else
+                get_human_input(map)
+                #game_state
+            end
+        end
+    end
+
+    def is_game_over(map) do
+        if (Map.has_key?(map, "statuses") && map["statuses"]["game_over"] === true) do
+            true
+        else
+            false
         end
     end
 
@@ -33,8 +42,14 @@ defmodule Game do
             end
     end
 
-    def show_end_game_results do
-        IO.puts "Game Over"
+    def show_end_game_results(map) do
+        IO.puts "Game Over!"
+        if (map["statuses"]["tie_game"] === true) do
+            IO.puts "No winners this time, it was a tie!"
+        else
+            winner = map["statuses"]["winner"]
+            IO.puts "Congratulations to the winner, Player " <> winner <> "!"
+        end
     end
 
     def combine_maps(old, new) do
@@ -42,7 +57,7 @@ defmodule Game do
     end
 
     def play_as_computer(request) do
-        IO.puts "Playing computer's turn:" # add player symbol
+        IO.puts "Playing computer's turn..." # add player symbol
         :timer.sleep(2000)
         action = %{verb: "PUT", route: "computer_players_turn"}
         display_updated_game_details(request, action)

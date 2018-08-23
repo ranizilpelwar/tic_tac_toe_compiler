@@ -36,6 +36,10 @@ defmodule MethodParser do
         place_convert_params_list_to_map(list)
     end
 
+    def undo_last_move(list) when length(list) == 0 do
+        undo_last_move_convert_to_map()
+    end
+
     def game_status(list) when length(list) == 0 do
         "called game_status with empty list"
     end
@@ -46,5 +50,9 @@ defmodule MethodParser do
 
     def place_convert_params_list_to_map([player_symbol, tile]) do
         %{verb: "PUT", route: "human_players_turn", actions: %{tile_on_board: tile}}
+    end
+
+    def undo_last_move_convert_to_map() do
+        %{verb: "PUT", route: "undo_move"}
     end
 end

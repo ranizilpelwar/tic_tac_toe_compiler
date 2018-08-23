@@ -223,7 +223,7 @@ yeccpars2(Other, _, _, _, _, _, _) ->
 -dialyzer({nowarn_function, yeccpars2_0/7}).
 yeccpars2_0(S, command, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 2, Ss, Stack, T, Ts, Tzr);
-yeccpars2_0(S, match_number, Ss, Stack, T, Ts, Tzr) ->
+yeccpars2_0(S, number, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 3, Ss, Stack, T, Ts, Tzr);
 yeccpars2_0(S, player_symbol, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 4, Ss, Stack, T, Ts, Tzr);
@@ -236,7 +236,7 @@ yeccpars2_1(_S, '$end', _Ss, Stack, _T, _Ts, _Tzr) ->
 yeccpars2_1(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
-yeccpars2_2(S, match_number, Ss, Stack, T, Ts, Tzr) ->
+yeccpars2_2(S, number, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 6, Ss, Stack, T, Ts, Tzr);
 yeccpars2_2(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_2_(Stack),

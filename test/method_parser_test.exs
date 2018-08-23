@@ -21,12 +21,15 @@ defmodule MethodParserTest do
     test "player move command to Lexer returns list of tokens" do
         assert MethodParser.tokens("place X at tile 5") ===  {:ok, [{:command, 1, 'place'}, 
                                                                 {:player_symbol, 1, 'X'},
-                                                                {:tile_on_board, 1, '5'}],
+                                                                {:number, 1, '5'}],
                                                         1}
     end
 
-    test "player move command returns a list with method name as atom and an empty params list" do
-        assert MethodParser.parse("place") === [:place, []]
+    test "player move command for lower end of board to Lexer returns list of tokens" do
+        assert MethodParser.tokens("place X at tile 2") ===  {:ok, [{:command, 1, 'place'}, 
+                                                                {:player_symbol, 1, 'X'},
+                                                                {:number, 1, '2'}],
+                                                        1}
     end
 
     test "player move command with player symbol and tile for Parser returns a list with method name as atom and a param list" do
@@ -38,7 +41,7 @@ defmodule MethodParserTest do
     end
 
     test "undo move command returns a list with method name as atom and an empty params list" do
-        assert MethodParser.parse("undo move") === [:undo_move, []]
+        assert MethodParser.parse("undo last move") === [:undo_last_move, []]
     end
 end
   

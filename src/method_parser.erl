@@ -231,7 +231,7 @@ yeccpars2(Other, _, _, _, _, _, _) ->
 -dialyzer({nowarn_function, yeccpars2_0/7}).
 yeccpars2_0(S, command, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 2, Ss, Stack, T, Ts, Tzr);
-yeccpars2_0(S, match_number, Ss, Stack, T, Ts, Tzr) ->
+yeccpars2_0(S, number, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 3, Ss, Stack, T, Ts, Tzr);
 yeccpars2_0(S, player_symbol, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 4, Ss, Stack, T, Ts, Tzr);
@@ -244,7 +244,7 @@ yeccpars2_1(_S, '$end', _Ss, Stack, _T, _Ts, _Tzr) ->
 yeccpars2_1(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
-yeccpars2_2(S, match_number, Ss, Stack, T, Ts, Tzr) ->
+yeccpars2_2(S, number, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 6, Ss, Stack, T, Ts, Tzr);
 yeccpars2_2(S, player_symbol, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 7, Ss, Stack, T, Ts, Tzr);
@@ -274,7 +274,7 @@ yeccpars2_6(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
 -dialyzer({nowarn_function, yeccpars2_7/7}).
-yeccpars2_7(S, tile_on_board, Ss, Stack, T, Ts, Tzr) ->
+yeccpars2_7(S, number, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 8, Ss, Stack, T, Ts, Tzr);
 yeccpars2_7(_, _, _, _, T, _, _) ->
  yeccerror(T).

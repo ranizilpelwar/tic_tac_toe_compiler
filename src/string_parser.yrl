@@ -1,15 +1,15 @@
-Terminals player_symbol command match_number.
+Terminals player_symbol command number.
 Nonterminals request.
 Rootsymbol request.
 
-request -> match_number : extract_value('$1').
+request -> number : extract_value('$1').
 request -> player_symbol : extract_value('$1').
 request -> player_symbol player_symbol : concat(extract_value('$1'), extract_value('$2')).
 request -> command : method_name(extract_value('$1')).
-request -> command match_number : concat(method_name(extract_value('$1')), extract_value('$2')).
-request -> command match_number player_symbol : concat(concat(method_name(extract_value('$1')), extract_value('$2')),
+request -> command number : concat(method_name(extract_value('$1')), extract_value('$2')).
+request -> command number player_symbol : concat(concat(method_name(extract_value('$1')), extract_value('$2')),
                                                                extract_value('$3')).
-request -> command match_number player_symbol player_symbol : start_game_signature('$1', '$2', '$3', '$4').
+request -> command number player_symbol player_symbol : start_game_signature('$1', '$2', '$3', '$4').
 
 Erlang code.
 
