@@ -1,5 +1,4 @@
 defmodule BoardGenerator do
-
     def display_board(board) do
         IO.puts "\nTic Tac Toe Board:\n"
         IO.puts format_board(board)
