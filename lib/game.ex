@@ -16,12 +16,21 @@ defmodule Game do
         if (Map.has_key?(map, :statuses) && map.statuses.game_over === true) do
             show_end_game_results()
         end
-        if (Map.has_key?(map, "game") && map["game"]["current_player_symbol"] === map["game"]["player2_symbol"]) do
+        if (Map.has_key?(map, "game") && is_computers_turn(map)) do
             play_as_computer(map)
         else
             get_human_input(map)
             #game_state
         end
+    end
+
+    def is_computers_turn(map) do
+        if (map["game"]["match_number"] == 2 && map["game"]["current_player_symbol"] === map["game"]["player2_symbol"] 
+            || map["game"]["match_number"] == 3) do
+                true
+            else
+                false    
+            end
     end
 
     def show_end_game_results do
@@ -34,6 +43,7 @@ defmodule Game do
 
     def play_as_computer(request) do
         IO.puts "Playing computer's turn:" # add player symbol
+        :timer.sleep(2000)
         action = %{verb: "PUT", route: "computer_players_turn"}
         display_updated_game_details(request, action)
     end
