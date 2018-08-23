@@ -36,5 +36,9 @@ defmodule MethodParserTest do
     test "player move command will return a map containing the request details" do
         assert MethodParser.call([:place, ["X", "5"]]) === %{route: "human_players_turn", verb: "PUT", actions: %{tile_on_board: "5"}}
     end
+
+    test "undo move command returns a list with method name as atom and an empty params list" do
+        assert MethodParser.parse("undo move") === [:undo_move, []]
+    end
 end
   

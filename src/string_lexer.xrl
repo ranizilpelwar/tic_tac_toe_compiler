@@ -1,13 +1,14 @@
 Definitions.
 
 WHITESPACE=[\s\t\r\n]+
-GAME_STATUS=(G|g)(A|a)(M|m)(E|e)(\s)(S|s)(T|t)(A|a)(T|t)(U|u)(S|s)
-START_GAME=(S|s)(T|t)(A|a)(R|r)(T|t)(\s)(G|g)(A|a)(M|m)(E|e)
 PLAYER_SYMBOL=[^0-9\s]
 BOARD_TILE=[1-9]
+GAME_STATUS=(G|g)(A|a)(M|m)(E|e)(\s)(S|s)(T|t)(A|a)(T|t)(U|u)(S|s)
+START_GAME=(S|s)(T|t)(A|a)(R|r)(T|t)(\s)(G|g)(A|a)(M|m)(E|e)
 HUMAN_MOVE=(P|p)(L|l)(A|a)(C|c)(E|e)
 TILE_MARKER=(A|a)(T|t)(\s)(T|t)(I|i)(L|l)(E|e)
-COMMAND={GAME_STATUS}|{START_GAME}|{HUMAN_MOVE}
+UNDO_MOVE=(U|u)(N|n)(D|d)(O|o)(\s)(M|m)(O|o)(V|v)(E|e)
+COMMAND={GAME_STATUS}|{START_GAME}|{HUMAN_MOVE}|{UNDO_MOVE}
 MATCH_NUMBER=[1-3]
 
 

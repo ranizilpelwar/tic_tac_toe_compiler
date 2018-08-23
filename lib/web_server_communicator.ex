@@ -19,11 +19,11 @@ defmodule WebServerCommunicator do
         Poison.encode!(map)
     end
 
-    def get_response(json, verb, route) do
+    def get_response(request, verb, route) do
         case verb do
-        "POST" -> HTTPoison.post @url <> route, json, [{"Content-Type", "application/json"}] 
-        "PUT" -> HTTPoison.put @url <> route, json, [{"Content-Type", "application/json"}] 
-        _ -> "missing case"
+        "POST" -> HTTPoison.post @url <> route, request, [{"Content-Type", "application/json"}] 
+        "PUT" -> HTTPoison.put @url <> route, request, [{"Content-Type", "application/json"}] 
+        _ -> {:error, %{reason: "Unknown request verb"}}
         end
     end
 end
