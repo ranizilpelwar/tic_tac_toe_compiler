@@ -23,10 +23,7 @@ defmodule Game do
             command = String.trim(command)          # "start game 2 X O"
             method_with_arguments = MethodParser.parse(command)    # :start_game, ["2", "X", "O"]
             action = MethodParser.call(method_with_arguments)     # %{statuses: %{game_over: false}}  
-            request = combine_maps(map, action)
-            game_state = WebServerCommunicator.send_request(request) # new game state as a map
-            BoardGenerator.display_board(game_state["game"]["board"])
-            execute_command(game_state)
+            display_updated_game_details(map, action)
             #game_state
         end
     end
@@ -41,7 +38,12 @@ defmodule Game do
 
     def play_as_computer(request) do
         IO.puts "Playing computer's turn:" # add player symbol
-        request = combine_maps(request, %{verb: "PUT", route: "computer_players_turn"})
+        action = %{verb: "PUT", route: "computer_players_turn"}
+        display_updated_game_details(request, action)
+    end
+
+    def display_updated_game_details(map, action) do
+        request = combine_maps(map, action)
         game_state = WebServerCommunicator.send_request(request) # new game state as a map
         BoardGenerator.display_board(game_state["game"]["board"])
         execute_command(game_state)
