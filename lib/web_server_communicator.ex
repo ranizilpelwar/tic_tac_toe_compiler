@@ -11,7 +11,11 @@ defmodule WebServerCommunicator do
             Poison.Parser.parse!(body)
         else
             {:error, %HTTPoison.Error{reason: reason}} ->
-            reason
+            if reason === :timeout do
+                send_request(map)
+            else
+                reason
+            end
         end              
     end
 
